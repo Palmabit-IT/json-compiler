@@ -28,7 +28,7 @@ var Compiler = require('json-compiler');
 
 var template = [
   {
-    '[[foo]]': ['bar1', 'bar3']
+    '[[foo]]': ['bar1', {fieldValue: 'bar3', fieldKey: 'text', style: 'customStyle'}]
   },
   '[[foo]]'
 ]
@@ -37,7 +37,7 @@ Compiler.compile(template, data);
 
 /*
 [
-  {bar1: 'b1', bar3: 'b3'},
+  {'b1', {text: 'b3', style: 'customStyle'}},
   {bar1: 'b1', bar2: 'b2', bar3: 'b3'}
 ]
 */
