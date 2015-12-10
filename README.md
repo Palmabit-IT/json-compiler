@@ -13,7 +13,10 @@ npm install json-compiler --save
 
 ```javascript
 var data = {
-  foo: {bar1: 'b1', bar2: 'b2', bar3: 'b3'},
+  foo: [
+    {bar1: 'b1', bar2: 'b2', bar3: 'b3'},
+    {bar1: 'b11', bar2: 'b22', bar3: 'b33'}
+  ],
   bar: [foo, bar],
   calc: function () {
     return 1 + 2;
@@ -21,7 +24,7 @@ var data = {
 }
 ```
 
-### Array replacement
+### Array replacement (example 1)
 
 ```javascript
 var Compiler = require('json-compiler');
@@ -29,7 +32,26 @@ var Compiler = require('json-compiler');
 var template = [
   {
     '[[foo]]': ['bar1', {fieldValue: 'bar3', fieldKey: 'text', style: 'customStyle'}]
-  },
+  }
+]
+
+Compiler.compile(template, data);
+
+/*
+[
+  ['b1', {text: 'b3', style: 'customStyle'}],
+  ['b11', {text: 'b33', style: 'customStyle'}]
+]
+*/
+
+```
+
+### Array replacement (example 2)
+
+```javascript
+var Compiler = require('json-compiler');
+
+var template = [
   '[[foo]]'
 ]
 
@@ -37,8 +59,10 @@ Compiler.compile(template, data);
 
 /*
 [
-  {'b1', {text: 'b3', style: 'customStyle'}},
-  {bar1: 'b1', bar2: 'b2', bar3: 'b3'}
+  [
+    {bar1: 'b1', bar2: 'b2', bar3: 'b3'},
+    {bar1: 'b11', bar2: 'b22', bar3: 'b33'}
+  ]
 ]
 */
 
