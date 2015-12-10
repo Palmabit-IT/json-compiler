@@ -20,7 +20,8 @@
   "author": "Palmabit <hello@palmabit.com> (http://www.palmabit.com/)",
   "license": "MIT",
   "dependencies": {
-    "json-templater": "^1.0.2"
+    "json-templater": "^1.0.2",
+    "lodash": "^3.10.1"
   },
   "devDependencies": {
     "chai": "^3.4.1",

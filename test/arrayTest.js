@@ -120,11 +120,26 @@ describe('Json array replace', function () {
 
   it('should not convert object to string', function (done) {
     var template = {
-      foo: 'bar {{e}}'
+      foo: 'bar [[e]]'
     };
 
     expect(array.compile(template, data)).to.eql({
-      foo: 'bar {{e}}'
+      foo: []
+    });
+
+    done();
+  });
+
+  it('should replace value with function', function (done) {
+    var template = {
+      foo: [
+        'bar [[calc]]',
+        '[[calc]]'
+      ]
+    };
+
+    expect(array.compile(template, data)).to.eql({
+      foo: ['bar 3', '3']
     });
 
     done();
@@ -133,12 +148,16 @@ describe('Json array replace', function () {
   it('should replace value with function', function (done) {
     var template = {
       foo: {
+        foo: 'bar [[calc]]',
         bar: '[[calc]]'
       }
     };
 
     expect(array.compile(template, data)).to.eql({
-      foo: {bar: 3}
+      foo: {
+        foo: 'bar 3',
+        bar: '3'
+      }
     });
 
     done();

@@ -6,16 +6,16 @@ var TEMPLATE_OPEN = '[[';
 
 function regexTest(property) {
   // optimization to avoid regex calls (indexOf is strictly faster)
-  return property.indexOf(TEMPLATE_OPEN) >= 0 && REGEX.test(property);
+  return typeof property === 'string' && property.indexOf(TEMPLATE_OPEN) >= 0 && REGEX.test(property);
 }
 
 function replace(property, cb) {
-  property.replace(REGEX, function (whole, path) {
-    cb(path);
+  return property.replace(REGEX, function (whole, path) {
+    return cb(path);
   });
 }
 
-function pushToArray (path, array, obj) {
+function pushToArray(path, array, obj) {
   var data = Extract.extractValue(path, templateData) || [];
   var itemKeys = obj;
 
@@ -69,21 +69,36 @@ function findInArray(arr) {
 }
 
 function replaceProperty(property, parent, index) {
-  if (regexTest(property)) {
-    replace(property, function (path) {
-      parent.push(Extract.extractValue(path, templateData) || []);
-      parent.splice(index, 1);
-    });
+  if (!regexTest(property)) {
+    return;
   }
+
+  replace(property, function (path) {
+    var val = Extract.extractValue(path, templateData) || [];
+
+    if (typeof val === 'function') {
+      parent[index] = property.replace(REGEX, val());
+    } else {
+      parent.push(val);
+      parent.splice(index, 1);
+    }
+  });
 }
 
 function replaceValue(property, value, obj) {
-  if (typeof value === 'string' && regexTest(value)) {
-    replace(value, function (path) {
-      var val = Extract.extractValue(path, templateData) || [];
-      obj[property] = (typeof val === 'function') ? val() : val;
-    });
+  if (!regexTest(value)) {
+    return;
   }
+
+  replace(value, function (path) {
+    var val = Extract.extractValue(path, templateData) || [];
+
+    if (typeof val === 'function') {
+      obj[property] = value.replace(REGEX, val());
+    } else {
+      obj[property] = val;
+    }
+  });
 }
 
 exports.compile = function (obj, data) {
