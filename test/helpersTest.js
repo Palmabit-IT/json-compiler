@@ -1,13 +1,10 @@
 var should = require('chai').should(),
     expect = require('chai').expect;
 
-var object = require('json-templater/object'),
-    Helpers = require('../helpers');
+var Helpers = require('../helpers');
 
 describe('Apply helpers to compiled template', function () {
   var data = {
-    foo: 1,
-    bar: 2,
     increment: function (param) {
       return parseInt(param) + 1;
     },
@@ -19,13 +16,11 @@ describe('Apply helpers to compiled template', function () {
   it('should execute helper after compiling', function (done) {
     var template = {
       a: {
-        b: '[[#increment]]{{foo}}[[/increment]]'
+        b: '[[#increment]] 1 [[/increment]]'
       }
     };
 
-    var compiled = object(template, data);
-
-    expect(Helpers.compile(JSON.stringify(compiled), data)).to.eql({
+    expect(Helpers.compile(template, data)).to.eql({
       a: {
         b: '2'
       }
@@ -36,17 +31,11 @@ describe('Apply helpers to compiled template', function () {
 
   it('should execute helper with arguments', function (done) {
     var template = {
-      a: {
-        b: '[[#sum]] {{foo}}, {{bar}} [[/sum]]'
-      }
+      a: '[[#sum]] 1,2 [[/sum]]'
     };
 
-    var compiled = object(template, data);
-
-    expect(Helpers.compile(JSON.stringify(compiled), data)).to.eql({
-      a: {
-        b: '3'
-      }
+    expect(Helpers.compile(template, data)).to.eql({
+      a: '3'
     });
 
     done();

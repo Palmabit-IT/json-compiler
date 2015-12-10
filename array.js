@@ -4,9 +4,10 @@ var _ = require('lodash'),
 
 var REGEX = new RegExp(/\[\[([a-zA-Z.-_0-9]+)\]\]/);
 var TEMPLATE_OPEN = '[[';
+var EXCLUDE_OPEN = '[[#';
 
 var templateData = {};
-var regexUtils = new RegexUtils(REGEX, TEMPLATE_OPEN);
+var regexUtils = new RegexUtils(REGEX, TEMPLATE_OPEN, EXCLUDE_OPEN);
 
 
 function pushToArray(path, array, obj) {
