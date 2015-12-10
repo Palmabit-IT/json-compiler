@@ -78,7 +78,7 @@ function replaceProperty(property, parent, index) {
 }
 
 function replaceValue(property, value, obj) {
-  if (regexTest(value)) {
+  if (typeof value === 'string' && regexTest(value)) {
     replace(value, function (path) {
       var val = Extract.extractValue(path, templateData) || [];
       obj[property] = (typeof val === 'function') ? val() : val;

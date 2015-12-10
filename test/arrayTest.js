@@ -132,11 +132,13 @@ describe('Json array replace', function () {
 
   it('should replace value with function', function (done) {
     var template = {
-      foo: '[[calc]]'
+      foo: {
+        bar: '[[calc]]'
+      }
     };
 
     expect(array.compile(template, data)).to.eql({
-      foo: 3
+      foo: {bar: 3}
     });
 
     done();
