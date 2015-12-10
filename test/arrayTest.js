@@ -25,7 +25,7 @@ describe('Json array replace', function () {
           {b1: 'b1'}
         ],
         {
-          '[[arr1]]': ['a', 'b']
+          '[[arr1]]': ['a', {fieldValue: 'b', fieldKey: 'text', style:'style'}]
         }
       ]
     };
@@ -36,8 +36,8 @@ describe('Json array replace', function () {
           {a1: 'a1'},
           {b1: 'b1'}
         ],
-        ['aaa', 'bbb'],
-        ['aa2', 'bb2'],
+        ['aaa', {text: 'bbb', style:'style'}],
+        ['aa2', {text: 'bb2', style:'style'}]
       ]
     });
 

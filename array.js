@@ -1,4 +1,5 @@
-var Extract = require('./extract');
+var _ = require('lodash'),
+    Extract = require('./extract');
 var templateData = {};
 
 var REGEX = new RegExp(/\[\[([a-zA-Z.-_0-9]+)\]\]/);
@@ -17,7 +18,6 @@ function replace(property, cb) {
 
 function pushToArray(path, array, obj) {
   var data = Extract.extractValue(path, templateData) || [];
-  var itemKeys = obj;
 
   for (var i = 0; i < data.length; i += 1) {
     array.push(getArrayElement(data[i], obj));
@@ -25,14 +25,28 @@ function pushToArray(path, array, obj) {
 }
 
 function getArrayElement(data, obj) {
-  var item = [];
+  var o, temp, item = [];
 
   if (!obj) {
     return data;
   }
 
   for (var j = 0; j < obj.length; j += 1) {
-    item.push(data[obj[j]] || '');
+    o = obj[j];
+
+    switch (typeof o) {
+      case 'string':
+        item.push(data[o] || '');
+        break;
+      case 'object':
+        temp = {};
+        temp[o.fieldKey || 'text'] = data[o.fieldValue || 'text'];
+        _.assign(temp, o);
+        delete temp['fieldKey'];
+        delete temp['fieldValue'];
+        item.push(temp);
+        break;
+    }
   }
 
   return item;
