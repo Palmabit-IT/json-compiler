@@ -26,7 +26,7 @@ exports.compile = function (view, data) {
 
   while(match = re.exec(view)) {
     if (match.length >= 2) {
-      compiled = view.replace(re, F(match[2]));
+      compiled = view.replace(re, F.apply(this, match[2].trim().split(',')));
     }
   }
 
