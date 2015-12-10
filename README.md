@@ -18,8 +18,12 @@ var data = {
     {bar1: 'b11', bar2: 'b22', bar3: 'b33'}
   ],
   bar: [foo, bar],
+  val: 1,
   calc: function () {
     return 1 + 2;
+  },
+  sum: function (value) {
+    return parseInt(value) + 1
   }
 }
 ```
@@ -88,6 +92,25 @@ Compiler.compile(template, data);
 ```
 
 ### Replacement with functions
+
+```javascript
+var Compiler = require('json-compiler');
+
+var template = {
+  foo: '[[#sum]]{{val}}[[/sum]]'
+}
+
+Compiler.compile(template, data);
+
+/*
+{
+  foo: 2
+}
+*/
+
+```
+
+### Helper functions
 
 ```javascript
 var Compiler = require('json-compiler');

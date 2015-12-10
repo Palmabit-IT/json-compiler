@@ -1,20 +1,13 @@
 var _ = require('lodash'),
-    Extract = require('./extract');
-var templateData = {};
+    Extract = require('./utils/extract'),
+    RegexUtils = require('./utils/regex');
 
 var REGEX = new RegExp(/\[\[([a-zA-Z.-_0-9]+)\]\]/);
 var TEMPLATE_OPEN = '[[';
 
-function regexTest(property) {
-  // optimization to avoid regex calls (indexOf is strictly faster)
-  return typeof property === 'string' && property.indexOf(TEMPLATE_OPEN) >= 0 && REGEX.test(property);
-}
+var templateData = {};
+var regexUtils = new RegexUtils(REGEX, TEMPLATE_OPEN);
 
-function replace(property, cb) {
-  return property.replace(REGEX, function (whole, path) {
-    return cb(path);
-  });
-}
 
 function pushToArray(path, array, obj) {
   var data = Extract.extractValue(path, templateData) || [];
@@ -57,8 +50,8 @@ function findInObject(obj, parent, index) {
   for (var property in obj) {
     replaceValue(property, obj[property], obj);
 
-    if (regexTest(property)) {
-      replace(property, function (path) {
+    if (regexUtils.regexTest(property)) {
+      regexUtils.replace(property, function (path) {
         pushToArray(path, parent, obj[property]);
         parent.splice(index, 1);
       });
@@ -83,11 +76,11 @@ function findInArray(arr) {
 }
 
 function replaceProperty(property, parent, index) {
-  if (!regexTest(property)) {
+  if (!regexUtils.regexTest(property)) {
     return;
   }
 
-  replace(property, function (path) {
+  regexUtils.replace(property, function (path) {
     var val = Extract.extractValue(path, templateData) || [];
 
     if (typeof val === 'function') {
@@ -100,11 +93,11 @@ function replaceProperty(property, parent, index) {
 }
 
 function replaceValue(property, value, obj) {
-  if (!regexTest(value)) {
+  if (!regexUtils.regexTest(value)) {
     return;
   }
 
-  replace(value, function (path) {
+  regexUtils.replace(value, function (path) {
     var val = Extract.extractValue(path, templateData) || [];
 
     if (typeof val === 'function') {
