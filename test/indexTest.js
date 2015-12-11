@@ -36,12 +36,16 @@ describe('Json compiler', function () {
   it('should compile', function (done) {
     var template = {
       foo: {
+        a: '{{a}}',
         bar: '[[#sum]]{{a}},{{b}}[[/sum]]'
       }
     };
 
     expect(Compiler.compile(template, data)).to.eql({
-      foo: {bar: '3'}
+      foo: {
+        a: '1',
+        bar: '3'
+      }
     });
 
     done();

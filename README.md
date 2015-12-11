@@ -3,13 +3,13 @@
 It's a simple way to do template replacements on your js and json objects.
 It uses [json-templater](https://github.com/lightsofapollo/json-templater) library.
 
-##Installation
+## Installation
 
 ```
 npm install json-compiler --save
 ```
 
-##Usage
+## Usage
 
 ```javascript
 var data = {
@@ -139,6 +139,8 @@ var render = require('json-templater/string');
 render('{{xfoo}} {{say.what}}', { xfoo: 'yep', say: { what: 'yep' } });
 // yep yep
 ```
+
+**Important:** numbers are converted to strings.
 
 ### Json-templater/object
 
