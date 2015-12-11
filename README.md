@@ -185,6 +185,6 @@ Run tests locally with:
 
 Palmabit.com
 
-#Licence
+# Licence
 
 [See the MIT License](http://opensource.org/licenses/MIT)
