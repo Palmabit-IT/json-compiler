@@ -3,16 +3,18 @@ exports.preCompile = function (data) {
   function toString (obj) {
     for (var i in obj) {
       if (obj.hasOwnProperty(i)) {
-        if (typeof obj[i] === 'object') {
-          toString(obj[i]);
-        } else {
-          obj[i] = String(obj[i]);
+        switch (typeof obj[i]) {
+          case 'object':
+            toString(obj[i]);
+            break;
+          case 'number':
+            obj[i] = String(obj[i]);
+            break;
         }
       }
     }
-
-    return data;
   }
 
-  return toString(data);
+  toString(data)
+  return data;
 };

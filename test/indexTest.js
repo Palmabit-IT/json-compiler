@@ -6,7 +6,7 @@ var Compiler = require('../index');
 describe('Json compiler', function () {
   var data = {
     foo: {
-      bar: ['aaa', 'bbb', 'ccc']
+      bar: [1, 2, 3]
     },
     a: 1,
     b: 2,
@@ -23,11 +23,13 @@ describe('Json compiler', function () {
 
   it('should add helpers to data', function (done) {
     var template = {
-      foo: '[[calc]]'
+      foo: '[[calc]]',
+      bar: '[[foo.bar]]'
     };
 
     expect(Compiler.compile(template, data, helpers)).to.eql({
-      foo: '3'
+      foo: '3',
+      bar: ['1', '2', '3']
     });
 
     done();

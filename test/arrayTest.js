@@ -1,20 +1,21 @@
 var should = require('chai').should(),
     expect = require('chai').expect;
 
-var array = require('../array');
+var dataCompiler = require('../utils/data'),
+    array = require('../array');
 
 describe('Json array replace', function () {
-  var data = {
+  var data = dataCompiler.preCompile({
     arr1: [{a: 'aaa', b: 'bbb', c: 'ccc'}, {a: 'aa2', b: 'bb2', c: 'cc2'}],
     arr2: ['aaa', 'bbb', 'ccc'],
-    arr3: {a: 'aaa', b: 'bbb', c: 'ccc'},
+    arr3: {a: 1, b: 2, c: 3},
     foo: {
-      bar: ['ddd', 'eee', 'fff']
+      bar: [4, 5, 6]
     },
     calc: function () {
       return 1 + 2;
     }
-  };
+  });
 
 
   it('should replace some attributes from an array of objects', function (done) {
@@ -87,7 +88,7 @@ describe('Json array replace', function () {
 
     expect(array.compile(template, data)).to.eql({
       foo: [
-        ['ddd', 'eee', 'fff']
+        ['4', '5', '6']
       ]
     });
 
@@ -112,7 +113,7 @@ describe('Json array replace', function () {
     };
 
     expect(array.compile(template, data)).to.eql({
-      foo: {a: 'aaa', b: 'bbb', c: 'ccc'}
+      foo: {a: '1', b: '2', c: '3'}
     });
 
     done();
