@@ -53,19 +53,24 @@ describe('Json compiler', function () {
     done();
   });
 
-//  it('should compile template with function', function (done) {
-//    var template = {
-//      header: function () {return {foo: '{{a}}'}},
-//      foo: {
-//        a: '{{a}}'
-//      }
-//    };
-//
-//    var compiled = Compiler.compile(template, data);
-//
-//    expect(typeof compiled.header).to.eql('function');
-//    expect(compiled.header.toString()).to.eql((function () {return {foo: '1'}}).toString());
-//    expect(compiled.foo).to.eql({a: '1'});
-//    done();
-//  });
+  it('should compile template with function', function (done) {
+    var template = {
+      header: function () {
+        return {
+          foo: '{{a}}',
+          bar: '[[#sum]]{{a}},{{b}}[[/sum]]'
+        }
+      },
+      foo: {
+        a: '{{a}}'
+      }
+    };
+
+    var compiled = Compiler.compile(template, data);
+
+    expect(typeof compiled.header).to.eql('function');
+    expect(compiled.header.toString()).to.eql('function () {return {"foo":"1","bar":"3"}}');
+    expect(compiled.foo).to.eql({a: '1'});
+    done();
+  });
 });

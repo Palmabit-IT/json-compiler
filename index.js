@@ -1,19 +1,14 @@
 var _ = require('lodash'),
     object = require('json-templater/object'),
-    Compiler = require('./array'),
-    DataCompiler = require('./utils/data'),
-    Helpers = require('./helpers');
+    Iterator = require('./src/iterator'),
+    DataCompiler = require('./src/data_compiler');
+
 
 exports.compile = function (template, data, helpers) {
   //Pre-compile data
   var dataWithHelpers = DataCompiler.preCompile(_.assign({}, data, helpers));
 
-  //Compile template with json-templater library
-  var rendered = object(template, dataWithHelpers);
-
-  //Replace arrays
-  var rendered = Compiler.compile(rendered, dataWithHelpers);
-
-  //Post-compiling helpers applying
-  return Helpers.compile(rendered, dataWithHelpers);
+  //Pre-Compile template with json-templater library
+  //Iterate object and compile
+  return Iterator.iterateObj(object(template, dataWithHelpers), dataWithHelpers);
 };
