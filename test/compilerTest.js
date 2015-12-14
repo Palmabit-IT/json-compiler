@@ -6,7 +6,7 @@ var dataCompiler = require('../src/data_compiler'),
 
 describe('Json array replace', function () {
   var data = dataCompiler.preCompile({
-    arr1: [{a: 'aaa', b: 'bbb', c: 'ccc'}, {a: 'aa2', b: 'bb2', c: 'cc2'}],
+    arr1: [{a: 'aaa', b: 'bbb', c: {cc: 'ccc'}}, {a: 'aa2', b: 'bb2', c: {cc: 'cc2'}}],
     arr2: ['aaa', 'bbb', 'ccc'],
     arr3: {a: 1, b: 2, c: 3},
     foo: {
@@ -32,10 +32,23 @@ describe('Json array replace', function () {
     done();
   });
 
+  it('should replace some nested attributes from an array of objects', function (done) {
+    var template = {
+      '[[arr1]]': ['a', {fieldValue: 'c.cc', fieldKey: 'text', style:'style'}]
+    };
+
+    expect(compiler.compileKey(template, '[[arr1]]')).to.eql([
+      ['aaa', {text: 'ccc', style:'style'}],
+      ['aa2', {text: 'cc2', style:'style'}]
+    ]);
+
+    done();
+  });
+
   it('should replace an array of objects', function (done) {
     var template = ['[[arr1]]'];
 
-    expect(compiler.compileValue(template, 0)).to.eql([[{a: 'aaa', b: 'bbb', c: 'ccc'}, {a: 'aa2', b: 'bb2', c: 'cc2'}]]);
+    expect(compiler.compileValue(template, 0)).to.eql([[{a: 'aaa', b: 'bbb', c: {cc: 'ccc'}}, {a: 'aa2', b: 'bb2', c: {cc: 'cc2'}}]]);
 
     done();
   });

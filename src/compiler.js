@@ -36,7 +36,7 @@ function getArrayElement(data, obj) {
         break;
       case 'object':
         temp = {};
-        temp[o.fieldKey || 'text'] = data[o.fieldValue || 'text'];
+        temp[o.fieldKey || 'text'] = Extract.extractValue(o.fieldValue || 'text', data);
         _.assign(temp, o);
         delete temp['fieldKey'];
         delete temp['fieldValue'];
