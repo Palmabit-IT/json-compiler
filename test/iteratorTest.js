@@ -16,6 +16,11 @@ describe('Object iterator', function () {
           foo: 'bar'
         }
       }
+    },
+    args: function (arg1, arg2) {
+      return {
+        foo: arg1
+      };
     }
   };
 
@@ -25,4 +30,10 @@ describe('Object iterator', function () {
     expect(compiled.bar.foo.toString()).to.eql('function () {return {"foo":"bar"}}');
     done();
   });
+
+//  it('should iterate object with function with arguments', function (done) {
+//    var compiled = Iterator.iterateObj(data);
+//    expect(compiled.args.toString()).to.eql('function (arg1, arg2) {return arg1 + arg2;}');
+//    done();
+//  });
 });
