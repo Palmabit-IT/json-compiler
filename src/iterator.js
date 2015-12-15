@@ -1,5 +1,4 @@
 var JSONfn = require('json-fn'),
-    object = require('json-templater/object'),
     Compiler = require('./compiler'),
     HelperCompiler = require('./helper_compiler');
 

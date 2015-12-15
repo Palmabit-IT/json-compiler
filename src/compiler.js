@@ -2,9 +2,8 @@ var _ = require('lodash'),
     Extract = require('./utils/extract'),
     RegexUtils = require('./utils/regex');
 
-var REGEX = new RegExp(/{{([a-zA-Z.-_0-9]+)}}/);
+var REGEX = new RegExp(/{{(?!#)(?!\/)([a-zA-Z.-_0-9]+)}}/g);
 var TEMPLATE_OPEN = '{{';
-var EXCLUDE_OPEN = '{{#';
 
 var templateData = {};
 
@@ -50,7 +49,7 @@ function getArrayElement(data, obj) {
 
 
 function Compiler (data) {
-  this.regexUtils = new RegexUtils(REGEX, TEMPLATE_OPEN, EXCLUDE_OPEN);
+  this.regexUtils = new RegexUtils(REGEX, TEMPLATE_OPEN);
   templateData = data;
 }
 
@@ -79,28 +78,48 @@ Compiler.prototype.compileKey = function (obj, key) {
 };
 
 Compiler.prototype.compileValue = function (obj, key) {
-  var value = obj[key];
+  var replaced = this.replaceString(obj[key]);
 
-  if (!this.regexUtils.regexTest(value)) {
+  if (!replaced && replaced !== '') {
     return obj;
   }
 
-  this.regexUtils.replace(value, function (path) {
-    var val = Extract.extractValue(path, templateData) || [];
-
-    if (typeof val === 'function') {
-      val = value.replace(REGEX, val());
-    }
-
-    if (Array.isArray(obj)) {
-      obj.push(val);
-      obj.splice(key, 1);
-    } else {
-      obj[key] = val;
-    }
-  });
+  if (Array.isArray(obj)) {
+    obj.push(replaced);
+    obj.splice(key, 1);
+  } else {
+    obj[key] = replaced;
+  }
 
   return obj;
+};
+
+Compiler.prototype.replaceString = function (str) {
+  var replaced, val,
+      isString = true;
+
+  if (!this.regexUtils.regexTest(str)) {
+    return;
+  }
+
+  replaced = this.regexUtils.replace(str, function (path) {
+    val = Extract.extractValue(path, templateData) || '';
+
+    if (typeof val !== 'string') {
+      isString = false;
+    }
+    if (typeof val === 'function') {
+      val = str.replace(REGEX, val());
+    }
+
+    return val;
+  });
+
+  if (!isString) {
+    replaced = val;
+  }
+
+  return replaced;
 };
 
 module.exports = Compiler;

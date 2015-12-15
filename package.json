@@ -21,7 +21,6 @@
   "license": "MIT",
   "dependencies": {
     "json-fn": "^0.60.0",
-    "json-templater": "^1.0.2",
     "lodash": "^3.10.1"
   },
   "devDependencies": {

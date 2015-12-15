@@ -6,6 +6,8 @@ var dataCompiler = require('../src/data_compiler'),
 
 describe('Compiler', function () {
   var data = dataCompiler.preCompile({
+    a: 1,
+    b: 2,
     arr1: [{a: 'aaa', b: 'bbb', c: {cc: 'ccc'}}, {a: 'aa2', b: 'bb2', c: {cc: 'cc2'}}],
     arr2: ['aaa', 'bbb', 'ccc'],
     arr3: {a: 1, b: 2, c: 3},
@@ -99,7 +101,7 @@ describe('Compiler', function () {
     };
 
     expect(compiler.compileValue(template, 'foo')).to.eql({
-      foo: []
+      foo: 'bar '
     });
 
     done();
@@ -112,6 +114,18 @@ describe('Compiler', function () {
 
     expect(compiler.compileValue(template, 'foo')).to.eql({
       foo: 'bar 3'
+    });
+
+    done();
+  });
+
+  it('should replace value inside helper', function (done) {
+    var template = {
+      foo: '{{#sum}}{{a}},{{b}}{{/sum}}'
+    };
+
+    expect(compiler.compileValue(template, 'foo')).to.eql({
+      foo: '{{#sum}}1,2{{/sum}}'
     });
 
     done();

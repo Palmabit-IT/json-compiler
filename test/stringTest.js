@@ -42,15 +42,15 @@ describe('Json string replace', function () {
   });
 
 
-  it('should replace key name', function (done) {
-    var template = {
-      'd_{{d}}': 'ddd'
-    };
-
-    expect(Compiler.compile(template, data)).to.eql({
-      d_ddd: 'ddd'
-    });
-
-    done();
-  });
+//  it('should replace key name', function (done) {
+//    var template = {
+//      'd_{{d}}': 'ddd'
+//    };
+//
+//    expect(Compiler.compile(template, data)).to.eql({
+//      d_ddd: 'ddd'
+//    });
+//
+//    done();
+//  });
 });

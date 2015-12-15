@@ -82,7 +82,6 @@ describe('Json compiler', function () {
     var template = {
       foo: function () {
         return {
-          'a_{{a}}': '{{a}}',
           foo: '{{a.b.c}}',
           bar: ['{{foo.bar}}']
         }
@@ -95,7 +94,6 @@ describe('Json compiler', function () {
     var compiled = Compiler.compile(template, data);
 
     expect(compiled.foo()).to.eql({
-      a_1: '1',
       foo: '',
       bar: [
         ['1', '2', '3']
@@ -103,11 +101,9 @@ describe('Json compiler', function () {
     });
     expect(compiled.bar).to.eql([
       [
-        {a1: 'a1'},
-        {b1: 'b1'}
-      ],
-      ['aaa', {text: 'bbb', style: 'style'}],
-      ['aa2', {text: 'bb2', style: 'style'}]
+        {a: 'aaa', b: 'bbb', c: {cc: 'ccc'}},
+        {a: 'aa2', b: 'bb2', c: {cc: 'cc2'}}
+      ]
     ]);
     done();
   });

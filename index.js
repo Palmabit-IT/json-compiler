@@ -1,5 +1,4 @@
 var _ = require('lodash'),
-    object = require('json-templater/object'),
     Iterator = require('./src/iterator'),
     DataCompiler = require('./src/data_compiler');
 
