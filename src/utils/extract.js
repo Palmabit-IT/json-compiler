@@ -25,15 +25,8 @@ exports.extractValue = function (path, view) {
 
   var parts = path.split('.');
 
-  while (
-    // view should always be truthy as all objects are.
-      view &&
-        // must have a part in the dotted path
-          (part = parts.shift())
-      ) {
-    view = (typeof view === 'object' && part in view) ?
-        view[part] :
-        undefined;
+  while (view && (part = parts.shift()) ) {
+    view = (typeof view === 'object' && part in view) ? view[part] : '';
   }
 
   return view;

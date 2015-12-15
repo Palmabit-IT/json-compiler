@@ -1,7 +1,6 @@
 # JSON Compiler
 
 It's a simple way to do template replacements on your js and json objects.
-It uses [json-templater](https://github.com/lightsofapollo/json-templater) library.
 
 ## Installation
 
@@ -35,7 +34,7 @@ var Compiler = require('json-compiler');
 
 var template = [
   {
-    '[[foo]]': ['bar1', {fieldValue: 'bar3', fieldKey: 'text', style: 'customStyle'}]
+    '{{foo}}': ['bar1', {fieldValue: 'bar3', fieldKey: 'text', style: 'customStyle'}]
   }
 ]
 
@@ -56,7 +55,7 @@ Compiler.compile(template, data);
 var Compiler = require('json-compiler');
 
 var template = [
-  '[[foo]]'
+  '{{foo}}'
 ]
 
 Compiler.compile(template, data);
@@ -78,7 +77,7 @@ Compiler.compile(template, data);
 var Compiler = require('json-compiler');
 
 var template = {
-  bar: '[[foo]]'
+  bar: '{{foo}}'
 }
 
 Compiler.compile(template, data);
@@ -97,7 +96,7 @@ Compiler.compile(template, data);
 var Compiler = require('json-compiler');
 
 var template = {
-  foo: '[[calc]]'
+  foo: '{{calc}}'
 }
 
 Compiler.compile(template, data);
@@ -116,7 +115,7 @@ Compiler.compile(template, data);
 var Compiler = require('json-compiler');
 
 var template = {
-  foo: '[[#sum]]{{val}}, {{val}}[[/sum]]'
+  foo: '{{#sum}}{{val}}, {{val}}{{/sum}}'
 }
 
 Compiler.compile(template, data);
@@ -131,7 +130,6 @@ Compiler.compile(template, data);
 
 ### Json-templater/string
 
-See [json-templater](https://github.com/lightsofapollo/json-templater) doc.
 The string submodule is a very simple mustache like variable replacement with no special features:
 
 ```js
@@ -144,7 +142,6 @@ render('{{xfoo}} {{say.what}}', { xfoo: 'yep', say: { what: 'yep' } });
 
 ### Json-templater/object
 
-See [json-templater](https://github.com/lightsofapollo/json-templater) doc.
 The much more interesting part of this module is the object sub-module which does a deep clone and runs strings through json-templater/string (including keys!)
 
 `template.json:`

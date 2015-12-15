@@ -14,8 +14,7 @@
   "keywords": [
     "json",
     "compiler",
-    "json-compiler",
-    "json-templater"
+    "json-compiler"
   ],
   "author": "Palmabit <hello@palmabit.com> (http://www.palmabit.com/)",
   "license": "MIT",
