@@ -5,6 +5,8 @@ var Helpers = require('../src/helper_compiler');
 
 describe('Apply helpers to compiled template', function () {
   var data = {
+    foo: 1,
+    bar: 2,
     increment: function (param) {
       return parseInt(param) + 1;
     },
@@ -15,7 +17,7 @@ describe('Apply helpers to compiled template', function () {
 
   it('should execute helper after compiling', function (done) {
     var template = {
-      foo: '[[#increment]] 1 [[/increment]]'
+      foo: '{{#increment}} 1 {{/increment}}'
     };
 
     expect(Helpers.compile(template, 'foo', data)).to.eql({
@@ -27,7 +29,19 @@ describe('Apply helpers to compiled template', function () {
 
   it('should execute helper with arguments', function (done) {
     var template = {
-      foo: '[[#sum]] 1,2 [[/sum]]'
+      foo: '{{#sum}} 1,2 {{/sum}}'
+    };
+
+    expect(Helpers.compile(template, 'foo', data)).to.eql({
+      foo: '3'
+    });
+
+    done();
+  });
+
+  it('should execute helper with variable arguments', function (done) {
+    var template = {
+      foo: '{{#sum}}{{foo}},{{bar}}{{/sum}}'
     };
 
     expect(Helpers.compile(template, 'foo', data)).to.eql({
@@ -52,7 +66,7 @@ describe('Apply helpers to compiled template', function () {
   it('should execute helper after compiling', function (done) {
     var template = {
       foo: {
-        bar: '[[#increment]] 1 [[/increment]]'
+        bar: '{{#increment}} 1 {{/increment}}'
       }
     };
 
@@ -67,7 +81,7 @@ describe('Apply helpers to compiled template', function () {
 
   it('should execute helper with arguments', function (done) {
     var template = {
-      foo: '[[#sum]] 1,2 [[/sum]]'
+      foo: '{{#sum}} 1,2 {{/sum}}'
     };
 
     expect(Helpers.compile(template, data)).to.eql({
@@ -80,7 +94,7 @@ describe('Apply helpers to compiled template', function () {
   it('should execute helpers preserving functions', function (done) {
     var template = {
       foo: function () {return 1},
-      bar: '[[#sum]] 1,2 [[/sum]]'
+      bar: '{{#sum}} 1,2 {{/sum}}'
     };
 
     var compiled = Helpers.compile(template, data);

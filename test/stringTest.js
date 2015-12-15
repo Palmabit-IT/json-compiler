@@ -1,7 +1,7 @@
 var should = require('chai').should(),
     expect = require('chai').expect;
 
-var object = require('json-templater/object');
+var Compiler = require('../index');
 
 describe('Json string replace', function () {
   var data = {
@@ -21,7 +21,7 @@ describe('Json string replace', function () {
       b: '{{b}}'
     };
 
-    expect(object(template, data)).to.eql({
+    expect(Compiler.compile(template, data)).to.eql({
       a: 'aaa',
       b: 'bbb'
     });
@@ -34,7 +34,7 @@ describe('Json string replace', function () {
       c: '{{c.c}}'
     };
 
-    expect(object(template, data)).to.eql({
+    expect(Compiler.compile(template, data)).to.eql({
       c: 'ccc2'
     });
 
@@ -47,7 +47,7 @@ describe('Json string replace', function () {
       'd_{{d}}': 'ddd'
     };
 
-    expect(object(template, data)).to.eql({
+    expect(Compiler.compile(template, data)).to.eql({
       d_ddd: 'ddd'
     });
 

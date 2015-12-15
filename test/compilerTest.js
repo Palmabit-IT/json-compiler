@@ -4,7 +4,7 @@ var should = require('chai').should(),
 var dataCompiler = require('../src/data_compiler'),
     Compiler = require('../src/compiler');
 
-describe('Json array replace', function () {
+describe('Compiler', function () {
   var data = dataCompiler.preCompile({
     arr1: [{a: 'aaa', b: 'bbb', c: {cc: 'ccc'}}, {a: 'aa2', b: 'bb2', c: {cc: 'cc2'}}],
     arr2: ['aaa', 'bbb', 'ccc'],
@@ -21,10 +21,10 @@ describe('Json array replace', function () {
 
   it('should replace some attributes from an array of objects', function (done) {
     var template = {
-      '[[arr1]]': ['a', {fieldValue: 'b', fieldKey: 'text', style:'style'}]
+      '{{arr1}}': ['a', {fieldValue: 'b', fieldKey: 'text', style:'style'}]
     };
 
-    expect(compiler.compileKey(template, '[[arr1]]')).to.eql([
+    expect(compiler.compileKey(template, '{{arr1}}')).to.eql([
       ['aaa', {text: 'bbb', style:'style'}],
       ['aa2', {text: 'bb2', style:'style'}]
     ]);
@@ -34,10 +34,10 @@ describe('Json array replace', function () {
 
   it('should replace some nested attributes from an array of objects', function (done) {
     var template = {
-      '[[arr1]]': ['a', {fieldValue: 'c.cc', fieldKey: 'text', style:'style'}]
+      '{{arr1}}': ['a', {fieldValue: 'c.cc', fieldKey: 'text', style:'style'}]
     };
 
-    expect(compiler.compileKey(template, '[[arr1]]')).to.eql([
+    expect(compiler.compileKey(template, '{{arr1}}')).to.eql([
       ['aaa', {text: 'ccc', style:'style'}],
       ['aa2', {text: 'cc2', style:'style'}]
     ]);
@@ -46,7 +46,7 @@ describe('Json array replace', function () {
   });
 
   it('should replace an array of objects', function (done) {
-    var template = ['[[arr1]]'];
+    var template = ['{{arr1}}'];
 
     expect(compiler.compileValue(template, 0)).to.eql([[{a: 'aaa', b: 'bbb', c: {cc: 'ccc'}}, {a: 'aa2', b: 'bb2', c: {cc: 'cc2'}}]]);
 
@@ -54,7 +54,7 @@ describe('Json array replace', function () {
   });
 
   it('should replace an array of array', function (done) {
-    var template = ['[[arr2]]'];
+    var template = ['{{arr2}}'];
 
     expect(compiler.compileValue(template, 0)).to.eql([['aaa', 'bbb', 'ccc']]);
 
@@ -62,7 +62,7 @@ describe('Json array replace', function () {
   });
 
   it('should replace array from dotted path', function (done) {
-    var template = ['[[foo.bar]]'];
+    var template = ['{{foo.bar}}'];
 
     expect(compiler.compileValue(template, 0)).to.eql([['4', '5', '6']]);
 
@@ -71,7 +71,7 @@ describe('Json array replace', function () {
 
   it('should replace with array', function (done) {
     var template = {
-      foo: '[[arr2]]'
+      foo: '{{arr2}}'
     };
 
     expect(compiler.compileValue(template, 'foo')).to.eql({
@@ -83,7 +83,7 @@ describe('Json array replace', function () {
 
   it('should replace with object', function (done) {
     var template = {
-      foo: '[[arr3]]'
+      foo: '{{arr3}}'
     };
 
     expect(compiler.compileValue(template, 'foo')).to.eql({
@@ -95,7 +95,7 @@ describe('Json array replace', function () {
 
   it('should not convert object to string', function (done) {
     var template = {
-      foo: 'bar [[e]]'
+      foo: 'bar {{e}}'
     };
 
     expect(compiler.compileValue(template, 'foo')).to.eql({
@@ -107,7 +107,7 @@ describe('Json array replace', function () {
 
   it('should replace value with function', function (done) {
     var template = {
-      foo: 'bar [[calc]]'
+      foo: 'bar {{calc}}'
     };
 
     expect(compiler.compileValue(template, 'foo')).to.eql({

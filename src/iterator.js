@@ -10,7 +10,7 @@ function compileFunctionContent(func, parent) {
       content = func();
 
   if (typeof content === 'object') {
-    compiled = iterateObj(object(content, data), parent);
+    compiled = iterateObj(content, parent);
   }
 
   return eval('(function () {return ' + JSONfn.stringify(compiled) + '})');

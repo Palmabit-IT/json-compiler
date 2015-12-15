@@ -1,7 +1,7 @@
 var RegexUtils = require('./utils/regex');
 
-var REGEX = new RegExp(/\[\[#([^\]\]]+)?/g);
-var FUNC_OPEN = '[[#';
+var REGEX = new RegExp(/{{#([^}}]+)?/g);
+var FUNC_OPEN = '{{#';
 
 var regexUtils = new RegexUtils(REGEX, FUNC_OPEN);
 
@@ -24,9 +24,10 @@ exports.compile = function (obj, key, data) {
       str = obj[key],
       func = getFunc(str),
       F = data && typeof data[func] === 'function' ? data[func] : function () {},
-      re = /\[\[#([a-zA-Z.-_0-9]+)\]\]?(.*)\[\[\/([a-zA-Z.-_0-9]+)\]\]?/g;
+      re = /{{#([a-zA-Z.-_0-9]+)}}?(.*){{\/([a-zA-Z.-_0-9]+)}}?/g;
 
   while (match = re.exec(str)) {
+    console.log(match[2].trim().split(','));
     if (match.length >= 2) {
       obj[key] = str.replace(re, F.apply(this, match[2].trim().split(',')));
     }

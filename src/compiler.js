@@ -2,9 +2,9 @@ var _ = require('lodash'),
     Extract = require('./utils/extract'),
     RegexUtils = require('./utils/regex');
 
-var REGEX = new RegExp(/\[\[([a-zA-Z.-_0-9]+)\]\]/);
-var TEMPLATE_OPEN = '[[';
-var EXCLUDE_OPEN = '[[#';
+var REGEX = new RegExp(/{{([a-zA-Z.-_0-9]+)}}/);
+var TEMPLATE_OPEN = '{{';
+var EXCLUDE_OPEN = '{{#';
 
 var templateData = {};
 
