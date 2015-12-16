@@ -8,10 +8,16 @@ describe('Helper compiler', function () {
     var data = {
       foo: function () {
         return 1 + 1
+      },
+      bar: {
+        foo: function () {
+          return 1 + 1
+        }
       }
     };
 
     expect(Helper.compile('{{#foo}}{{/foo}}', data)).to.eql('2');
+    expect(Helper.compile('{{#bar.foo}}{{/bar.foo}}', data)).to.eql('2');
     done();
   });
 

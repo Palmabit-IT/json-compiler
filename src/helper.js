@@ -7,12 +7,12 @@ var FUNC_OPEN = '{{#';
 var regexUtils = new RegexUtils(REGEX, FUNC_OPEN);
 
 
-function getFunc(view) {
+function getFunc(view, data) {
   var func;
 
   if (regexUtils.regexTest(view)) {
     regexUtils.replace(view, function (path) {
-      func = path;
+      func = Extract.extractValue(path, data);
     });
   }
 
@@ -22,8 +22,8 @@ function getFunc(view) {
 
 exports.compile = function (str, data) {
   var match,
-      func = getFunc(str),
-      F = data && typeof data[func] === 'function' ? data[func] : function () {},
+      func = getFunc(str, data),
+      F = func && typeof func === 'function' ? func : function () {},
       re = /{{#([a-zA-Z.-_0-9]+)}}?(.*){{\/([a-zA-Z.-_0-9]+)}}?/g;
 
   while (match = re.exec(str)) {
