@@ -1,4 +1,5 @@
-var RegexUtils = require('./utils/regex');
+var Extract = require('./utils/extract'),
+    RegexUtils = require('./utils/regex');
 
 var REGEX = new RegExp(/{{#([^}}]+)?/g);
 var FUNC_OPEN = '{{#';
@@ -19,18 +20,17 @@ function getFunc(view) {
 }
 
 
-exports.compile = function (obj, key, data) {
+exports.compile = function (str, data) {
   var match,
-      str = obj[key],
       func = getFunc(str),
       F = data && typeof data[func] === 'function' ? data[func] : function () {},
       re = /{{#([a-zA-Z.-_0-9]+)}}?(.*){{\/([a-zA-Z.-_0-9]+)}}?/g;
 
   while (match = re.exec(str)) {
     if (match.length >= 2) {
-      obj[key] = str.replace(re, F.apply(this, match[2].trim().split(',')));
+      return str.replace(re, F.apply(this, match[2].trim().split(',')));
     }
   }
 
-  return obj;
+  return str;
 };

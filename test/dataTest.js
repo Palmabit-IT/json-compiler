@@ -1,7 +1,7 @@
 var should = require('chai').should(),
     expect = require('chai').expect;
 
-var dataCompiler = require('../src/data_compiler');
+var dataCompiler = require('../src/data');
 
 describe('Data per-compiler', function () {
   var data = {

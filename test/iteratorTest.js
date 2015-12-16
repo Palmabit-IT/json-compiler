@@ -4,36 +4,124 @@ var should = require('chai').should(),
 var Iterator = require('../src/iterator');
 
 describe('Object iterator', function () {
-  var data = {
-    foo: function () {
-      return {
-        foo: 'bar'
-      }
-    },
-    bar: {
-      foo: function () {
-        return {
-          foo: 'bar'
+  it('should iterate object', function (done) {
+    var data = {
+      foo: {
+        bar: {
+          foo: ['foo', 'bar']
         }
       }
-    },
-    args: function (arg1, arg2) {
-      return {
-        foo: arg1
-      };
-    }
-  };
+    };
 
-  it('should iterate object with nested functions', function (done) {
-    var compiled = Iterator.iterateObj(data);
-    expect(compiled.foo.toString()).to.eql('function () {return {"foo":"bar"}}');
-    expect(compiled.bar.foo.toString()).to.eql('function () {return {"foo":"bar"}}');
+    expect(Iterator.iterateObj(data)).to.eql({
+      foo: {
+        bar: {
+          foo: ['foo', 'bar']
+        }
+      }
+    });
     done();
   });
 
-//  it('should iterate object with function with arguments', function (done) {
-//    var compiled = Iterator.iterateObj(data);
-//    expect(compiled.args.toString()).to.eql('function (arg1, arg2) {return arg1 + arg2;}');
-//    done();
-//  });
+  it('should compile value string', function (done) {
+    var data = {
+      foo: 'bar'
+    };
+    var template = {
+      foo: 'bar_{{foo}}'
+    };
+
+    expect(Iterator.iterateObj(template, data)).to.eql({
+      foo: 'bar_bar'
+    });
+    done();
+  });
+
+  it('should compile key string', function (done) {
+    var data = {
+      foo: 'bar'
+    };
+    var template = {
+      'foo_{{foo}}': 'bar'
+    };
+
+    expect(Iterator.iterateObj(template, data)).to.eql({
+      foo_bar: 'bar'
+    });
+    done();
+  });
+
+  it('should compile key string with function', function (done) {
+    var data = {
+      foo: {
+        bar: function () {
+          return 1 + 1;
+        }
+      }
+    };
+    var template = {
+      'foo_{{foo.bar}}': 'bar'
+    };
+
+    expect(Iterator.iterateObj(template, data)).to.eql({
+      foo_2: 'bar'
+    });
+    done();
+  });
+
+  it('should compile key string when variable is not found', function (done) {
+    var data = {
+      foo: 'bar'
+    };
+    var template = {
+      'foo_{{foo.bar}}': 'bar'
+    };
+
+    expect(Iterator.iterateObj(template, data)).to.eql({
+      'foo_': 'bar'
+    });
+    done();
+  });
+
+  it('should compile value string with function inside helper', function (done) {
+    var data = {
+      foo: {
+        bar: function () {
+          return 1 + 1;
+        }
+      },
+      bar: function (a) {
+        return parseInt(a) * 2;
+      }
+    };
+    var template = {
+      'foo': '{{#bar}}{{foo.bar}}{{/bar}}'
+    };
+
+    expect(Iterator.iterateObj(template, data)).to.eql({
+      'foo': '4'
+    });
+    done();
+  });
+
+  it('should compile key string with function inside helper', function (done) {
+    var data = {
+      foo: {
+        bar: function () {
+          return 1 + 1;
+        }
+      },
+      bar: function (a) {
+        return parseInt(a) * 2;
+      }
+    };
+    var template = {
+      'foo_{{#bar}}{{foo.bar}}{{/bar}}': 'bar'
+    };
+
+    expect(Iterator.iterateObj(template, data)).to.eql({
+      'foo_4': 'bar'
+    });
+    done();
+  });
 });

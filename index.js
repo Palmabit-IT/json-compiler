@@ -1,6 +1,6 @@
 var _ = require('lodash'),
     Iterator = require('./src/iterator'),
-    DataCompiler = require('./src/data_compiler');
+    DataCompiler = require('./src/data');
 
 
 exports.compile = function (template, data, helpers) {

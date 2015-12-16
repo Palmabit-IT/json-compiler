@@ -1,43 +1,57 @@
-var JSONfn = require('json-fn'),
-    Compiler = require('./compiler'),
-    HelperCompiler = require('./helper_compiler');
+var _ = require('lodash'),
+    JSONfn = require('json-fn'),
+    ArrayCompiler = require('./array'),
+    Helper = require('./helper'),
+    String = require('./string');
 
 var data, compiler, helperCompiler;
 
-function compileFunctionContent(func, parent) {
+/*
+function compileFunctionContent(func) {
   var compiled,
       content = func();
 
   if (typeof content === 'object') {
-    compiled = iterateObj(content, parent);
+    compiled = iterateObj(content);
   }
 
   return eval('(function () {return ' + JSONfn.stringify(compiled) + '})');
 }
+*/
 
-function iterateObj (obj, parent) {
-  for (var i in obj) {
-    if (obj.hasOwnProperty(i)) {
-      switch (typeof obj[i]) {
-        case 'string':
-          HelperCompiler.compile(compiler.compileValue(obj, i), i, data);
-          break;
-        case 'object':
-          iterateObj(obj[i], obj);
-          compiler.compileByKey(obj, i, parent);
-          break;
-        case 'function':
-          obj[i] = compileFunctionContent(obj[i], obj);
-          break;
-      }
-    }
+function iterateArray(array) {
+  return ArrayCompiler.compileArray(array.map(function(obj) {
+    return iterate(obj);
+  }), data);
+}
+
+function iterateObj(obj) {
+  var result = {};
+
+  if (Array.isArray(obj)) {
+    return iterateArray(obj);
   }
 
-  return obj;
+  for (var key in obj) {
+    result[iterate(key)] = iterate(obj[key]);
+  }
+
+  return result;
 }
+
+function iterate(input) {
+  switch (typeof input) {
+    case 'string':
+      return Helper.compile(String.compile(input, data), data);
+    case 'object':
+      return input ? iterateObj(input) : input;
+    default:
+      return input;
+  }
+}
+
 
 exports.iterateObj = function (obj, dataWithHelpers) {
   data = dataWithHelpers;
-  compiler = new Compiler(data);
-  return iterateObj(obj)
+  return iterate(obj)
 };
