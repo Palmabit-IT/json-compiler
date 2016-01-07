@@ -71,20 +71,27 @@ Array replacement is made by using variables like ```[[foo]]```.
 ```javascript
 var data = {
   foo: [
-    {foo: 'foo_foo', bar: {foo: 'bar_foo'}},
-    {foo: 'foo_bar', bar: {foo: 'bar_bar'}}
+    {foo: 'foo_foo', bar: {foo: 'bar_foo', bar: '1'}},
+    {foo: 'foo_bar', bar: {foo: 'bar_bar', bar: '2'}}
   ]
 };
-var object = {
-  '[[foo]]': ['foo', {fieldValue: 'bar.foo', fieldKey: 'text', customAttribute: 'customValue'}]
+
+var helpers: {
+    sum: function (a, b) {
+        return parseInt(a) + parseInt(b);
+    }
 };
 
-Compiler.compile(object, data);
+var object = {
+  '[[foo]]': ['foo', {key1: '{{bar.foo}}', key2: '{{#sum}}{{bar.bar}},{{bar.bar}}{{/sum}}', key3: 'customValue'}]
+};
+
+Compiler.compile(object, data, helpers);
 
 /*
 [
-  ['foo_foo', {text: 'bar_foo', customAttribute: 'customValue'}],
-  ['foo_bar', {text: 'bar_bar', customAttribute: 'customValue'}]
+  ['foo_foo', {key1: 'bar_foo', key2: 2, key3: 'customValue'}],
+  ['foo_bar', {key1: 'bar_bar', key2: 4, key3: 'customValue'}]
 ]
 */
 
