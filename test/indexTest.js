@@ -95,13 +95,13 @@ describe('Json-compiler', function () {
     };
     var template = [
       {
-        '[[foo]]': [{text: '{{#sum}}{{bar.foo}},{{bar.foo}}{{/sum}}', customAttribute: 'customValue'}]
+        '[[foo]]': [{text: '{{#sum}}{{bar.foo}},{{bar.foo}}{{/sum}} {{#calc}}{{/calc}}', customAttribute: 'customValue'}]
       }
     ];
 
     expect(Compiler.compile(template, data, helpers)).to.eql([
-      [{text: '2', customAttribute: 'customValue'}],
-      [{text: '4', customAttribute: 'customValue'}]
+      [{text: '2 3', customAttribute: 'customValue'}],
+      [{text: '4 3', customAttribute: 'customValue'}]
     ]);
     done();
   });
