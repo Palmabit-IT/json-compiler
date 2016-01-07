@@ -72,7 +72,7 @@ describe('Json-compiler', function () {
         {foo: 'bar'}, {bar: 'foo'}
       ],
       {
-        '[[foo]]': ['foo', {fieldValue: 'bar.foo', fieldKey: 'text', customAttribute: 'customValue'}]
+        '[[foo]]': ['foo', {text: '{{bar.foo}}', customAttribute: 'customValue'}]
       }
     ];
 
@@ -82,6 +82,26 @@ describe('Json-compiler', function () {
       ],
       ['foo_foo', {text: 'bar_foo', customAttribute: 'customValue'}],
       ['foo_bar', {text: 'bar_bar', customAttribute: 'customValue'}]
+    ]);
+    done();
+  });
+
+  it('should replace with an array and helpers', function (done) {
+    var data = {
+      foo: [
+        {bar: {foo: '1'}},
+        {bar: {foo: '2'}}
+      ]
+    };
+    var template = [
+      {
+        '[[foo]]': [{text: '{{#sum}}{{bar.foo}},{{bar.foo}}{{/sum}}', customAttribute: 'customValue'}]
+      }
+    ];
+
+    expect(Compiler.compile(template, data, helpers)).to.eql([
+      [{text: '2', customAttribute: 'customValue'}],
+      [{text: '4', customAttribute: 'customValue'}]
     ]);
     done();
   });

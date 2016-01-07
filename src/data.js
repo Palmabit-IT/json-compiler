@@ -1,11 +1,14 @@
 exports.preCompile = function (data) {
+  function toString (obj, maxIteration) {
+    if (!maxIteration) {
+      return;
+    }
 
-  function toString (obj) {
     for (var i in obj) {
       if (obj.hasOwnProperty(i)) {
         switch (typeof obj[i]) {
           case 'object':
-            toString(obj[i]);
+            toString(obj[i], --maxIteration);
             break;
           case 'number':
             obj[i] = String(obj[i]);
@@ -15,6 +18,6 @@ exports.preCompile = function (data) {
     }
   }
 
-  toString(data)
+  toString(data, 1000);
   return data;
 };

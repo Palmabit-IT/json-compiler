@@ -33,7 +33,7 @@ function iterateObj(obj) {
   }
 
   for (var key in obj) {
-    result[iterate(key)] = iterate(obj[key]);
+    result[iterate(key)] = ArrayCompiler.isArrayKey(key) ? obj[key] : iterate(obj[key]);
   }
 
   return result;

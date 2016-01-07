@@ -1,12 +1,20 @@
 var _ = require('lodash'),
     Extract = require('./utils/extract'),
-    RegexUtils = require('./utils/regex');
+    RegexUtils = require('./utils/regex'),
+    Helper = require('./helper'),
+    String = require('./string');
 
 var REGEX = new RegExp(/\[\[([a-zA-Z.-_0-9]+)\]\]/g);
 var TEMPLATE_OPEN = '[[';
 
 var regexUtils = new RegexUtils(REGEX, TEMPLATE_OPEN);
 
+var dataWithHelpers;
+
+
+function isArrayKey(key) {
+  return regexUtils.regexTest(key);
+}
 
 function replaceArray(data, path, obj) {
   var array = [],
@@ -26,8 +34,8 @@ function getArrayElement(data, obj) {
     return data;
   }
 
-  for (var j = 0; j < obj.length; j += 1) {
-    o = obj[j];
+  for (var key in obj) {
+    o = obj[key];
 
     switch (typeof o) {
       case 'string':
@@ -35,10 +43,9 @@ function getArrayElement(data, obj) {
         break;
       case 'object':
         temp = {};
-        temp[o.fieldKey || 'text'] = Extract.extractValue(o.fieldValue || 'text', data);
-        _.assign(temp, o);
-        delete temp['fieldKey'];
-        delete temp['fieldValue'];
+        for (var i in o) {
+          temp[i] = Helper.compile(String.compile(o[i], data), dataWithHelpers);
+        }
         item.push(temp);
         break;
     }
@@ -96,6 +103,7 @@ function compile(obj, data) {
 
 function compileArray(array, data) {
   var result = [];
+  dataWithHelpers = data;
 
   _.forEachRight(array, function (obj, i) {
     var canReplace = !Array.isArray(obj),
@@ -115,5 +123,6 @@ function compileArray(array, data) {
 
 module.exports = {
   compile: compile,
-  compileArray: compileArray
+  compileArray: compileArray,
+  isArrayKey: isArrayKey
 }

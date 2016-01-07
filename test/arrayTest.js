@@ -42,12 +42,12 @@ describe('Array compiler', function () {
       ]
     };
     var template = {
-      '[[foo]]': ['foo', {fieldValue: 'bar.foo', fieldKey: 'text', customAttribute: 'customValue'}]
+      '[[foo]]': ['foo', {text: '{{foo}}', customAttribute: 'customValue'}, {text: '{{bar.foo}}/{{foo}}', customAttribute: 'customValue'}]
     };
 
     expect(ArrayCompiler.compile(template, data)).to.eql([
-      ['foo_foo', {text: 'bar_foo', customAttribute: 'customValue'}],
-      ['foo_bar', {text: 'bar_bar', customAttribute: 'customValue'}]
+      ['foo_foo', {text: 'foo_foo', customAttribute: 'customValue'}, {text: 'bar_foo/foo_foo', customAttribute: 'customValue'}],
+      ['foo_bar', {text: 'foo_bar', customAttribute: 'customValue'}, {text: 'bar_bar/foo_bar', customAttribute: 'customValue'}]
     ]);
     done();
   });
@@ -64,7 +64,7 @@ describe('Array compiler', function () {
         {foo: 'bar'}, {bar: 'foo'}
       ],
       {
-        '[[foo]]': ['foo', {fieldValue: 'bar.foo', fieldKey: 'text', customAttribute: 'customValue'}]
+        '[[foo]]': ['foo', {text: '{{bar.foo}}/{{foo}}', customAttribute: 'customValue'}]
       }
     ];
 
@@ -72,8 +72,8 @@ describe('Array compiler', function () {
       [
         {foo: 'bar'}, {bar: 'foo'}
       ],
-      ['foo_foo', {text: 'bar_foo', customAttribute: 'customValue'}],
-      ['foo_bar', {text: 'bar_bar', customAttribute: 'customValue'}]
+      ['foo_foo', {text: 'bar_foo/foo_foo', customAttribute: 'customValue'}],
+      ['foo_bar', {text: 'bar_bar/foo_bar', customAttribute: 'customValue'}]
     ]);
     done();
   });
