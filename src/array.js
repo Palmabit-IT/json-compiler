@@ -18,7 +18,7 @@ function isArrayKey(key) {
 
 function replaceArray(data, path, obj) {
   var array = [],
-      objData = Extract.extractValue(path, data) || [];
+      objData = Extract.extractValue(path, data, []);
 
   for (var i in objData) {
     array.push(getArrayElement(objData[i], obj));

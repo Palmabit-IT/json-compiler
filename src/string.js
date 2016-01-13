@@ -14,7 +14,7 @@ exports.compile = function (str, data) {
   }
 
   return regexUtils.replace(str, function (path) {
-    var val = Extract.extractValue(path, data) || '';
+    var val = Extract.extractValue(path, data);
     return (typeof val === 'function') ? val() : val;
   });
 };
