@@ -1,11 +1,10 @@
-var should = require('chai').should(),
-    expect = require('chai').expect;
+const expect = require('chai').expect;
 
-var Helper = require('../src/helper');
+const Helper = require('../src/helper');
 
 describe('Helper compiler', function () {
   it('should execute helper', function (done) {
-    var data = {
+    const data = {
       foo: function () {
         return 1 + 1
       },
@@ -22,7 +21,7 @@ describe('Helper compiler', function () {
   });
 
   it('should execute helper with parameters', function (done) {
-    var data = {
+    const data = {
       foo: function (a, b) {
         return parseInt(a) + parseInt(b);
       }

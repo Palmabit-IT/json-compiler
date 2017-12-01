@@ -1,11 +1,10 @@
-var should = require('chai').should(),
-    expect = require('chai').expect;
+const expect = require('chai').expect;
 
-var Iterator = require('../src/iterator');
+const Iterator = require('../src/iterator');
 
 describe('Object iterator', function () {
   it('should iterate object', function (done) {
-    var data = {
+    const data = {
       foo: {
         bar: {
           foo: ['foo', 'bar']
@@ -24,10 +23,10 @@ describe('Object iterator', function () {
   });
 
   it('should compile value string', function (done) {
-    var data = {
+    const data = {
       foo: 'bar'
     };
-    var template = {
+    const template = {
       foo: 'bar_{{foo}}'
     };
 
@@ -38,10 +37,10 @@ describe('Object iterator', function () {
   });
 
   it('should compile key string', function (done) {
-    var data = {
+    const data = {
       foo: 'bar'
     };
-    var template = {
+    const template = {
       'foo_{{foo}}': 'bar'
     };
 
@@ -52,14 +51,14 @@ describe('Object iterator', function () {
   });
 
   it('should compile key string with function', function (done) {
-    var data = {
+    const data = {
       foo: {
         bar: function () {
           return 1 + 1;
         }
       }
     };
-    var template = {
+    const template = {
       'foo_{{foo.bar}}': 'bar'
     };
 
@@ -69,11 +68,11 @@ describe('Object iterator', function () {
     done();
   });
 
-  it('should compile key string when variable is not found', function (done) {
-    var data = {
+  it('should compile key string when constiable is not found', function (done) {
+    const data = {
       foo: 'bar'
     };
-    var template = {
+    const template = {
       'foo_{{foo.bar}}': 'bar'
     };
 
@@ -84,7 +83,7 @@ describe('Object iterator', function () {
   });
 
   it('should compile value string with function inside helper', function (done) {
-    var data = {
+    const data = {
       foo: {
         bar: function () {
           return 1 + 1;
@@ -94,7 +93,7 @@ describe('Object iterator', function () {
         return parseInt(a) * 2;
       }
     };
-    var template = {
+    const template = {
       'foo': '{{#bar}}{{foo.bar}}{{/bar}}'
     };
 
@@ -105,7 +104,7 @@ describe('Object iterator', function () {
   });
 
   it('should compile key string with function inside helper', function (done) {
-    var data = {
+    const data = {
       foo: {
         bar: function () {
           return 1 + 1;
@@ -115,7 +114,7 @@ describe('Object iterator', function () {
         return parseInt(a) * 2;
       }
     };
-    var template = {
+    const template = {
       'foo_{{#bar}}{{foo.bar}}{{/bar}}': 'bar'
     };
 

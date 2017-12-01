@@ -1,10 +1,9 @@
-var should = require('chai').should(),
-    expect = require('chai').expect;
+const expect = require('chai').expect;
 
-var dataCompiler = require('../src/data');
+const dataCompiler = require('../src/data');
 
 describe('Data per-compiler', function () {
-  var data = {
+  const data = {
     foo: 1,
     bar: {
       foo: 2
