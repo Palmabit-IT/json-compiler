@@ -7,8 +7,11 @@ var _ = require('lodash'),
 exports.compile = function (template, data, helpers) {
   var obj = (typeof template === 'string') ? JSONfn.parse(template) : template;
 
+  //Clean data
+  const dataCopy = _.cloneDeep(data)
+
   //Pre-compile data
-  var dataWithHelpers = DataCompiler.preCompile(_.assign({}, data, helpers));
+  var dataWithHelpers = DataCompiler.preCompile(_.assign({}, dataCopy, helpers));
 
   //Iterate object and compile
   return Iterator.iterateObj(obj, dataWithHelpers);
