@@ -76,4 +76,29 @@ describe('Array compiler', function () {
     ]);
     done();
   });
+
+  it('should replace nested template with an array of objects', done => {
+    const data = {
+      foo: [
+        { bar: "foo bar" }
+      ]
+    }
+
+    const template = [
+      {
+        '[[foo]]': [ {
+          text: [
+            {
+              text: '{{bar}}'
+            }
+          ]
+        }]
+      }
+    ]
+    const expected = [[{"text":[{"text":"foo bar"}]}]]
+
+    const result = ArrayCompiler.compileArray(template, data)
+    expect(result).to.deep.eq(expected)
+    done()
+  })
 })
