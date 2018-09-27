@@ -19,11 +19,11 @@
   "author": "Palmabit <hello@palmabit.com> (http://www.palmabit.com/)",
   "license": "MIT",
   "dependencies": {
-    "json-fn": "^0.60.0",
-    "lodash": "^3.10.1"
+    "json-fn": "^1.1.1",
+    "lodash": "^4.17.11"
   },
   "devDependencies": {
-    "chai": "^3.4.1",
-    "mocha": "^2.3.4"
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
   }
 }
