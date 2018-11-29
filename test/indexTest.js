@@ -1,10 +1,9 @@
-var should = require('chai').should(),
-    expect = require('chai').expect;
+const expect = require('chai').expect;
 
-var Compiler = require('../index');
+const Compiler = require('../index');
 
 describe('Json-compiler', function () {
-  var helpers = {
+  const helpers = {
     calc: function () {
       return 1 + 2;
     },
@@ -14,13 +13,13 @@ describe('Json-compiler', function () {
   };
 
   it('should replace strings', function (done) {
-    var data = {
+    const data = {
       foo: {
         bar: 'foo_bar'
       },
       bar: 'bar_bar'
     };
-    var template = {
+    const template = {
       'foo_{{foo.bar}}': {
         'bar_{{foo.bar}}': {
           foo: '{{bar}}',
@@ -41,12 +40,12 @@ describe('Json-compiler', function () {
   });
 
   it('should compile data with helpers and functions', function (done) {
-    var data = {
+    const data = {
       foo: {
         bar: 'foo_bar'
       }
     };
-    var template = {
+    const template = {
       foo: '{{calc}}',
       bar: '{{foo.bar}}',
       sum: '{{#sum}}{{calc}},{{calc}}{{/sum}}'
@@ -61,47 +60,47 @@ describe('Json-compiler', function () {
   });
 
   it('should replace with an array', function (done) {
-    var data = {
+    const data = {
       foo: [
-        {foo: 'foo_foo', bar: {foo: 'bar_foo'}},
-        {foo: 'foo_bar', bar: {foo: 'bar_bar'}}
+        { foo: 'foo_foo', bar: { foo: 'bar_foo' } },
+        { foo: 'foo_bar', bar: { foo: 'bar_bar' } }
       ]
     };
-    var template = [
+    const template = [
       [
-        {foo: 'bar'}, {bar: 'foo'}
+        { foo: 'bar' }, { bar: 'foo' }
       ],
       {
-        '[[foo]]': ['foo', {text: '{{bar.foo}}', customAttribute: 'customValue'}]
+        '[[foo]]': ['foo', { text: '{{bar.foo}}', customAttribute: 'customValue' }]
       }
     ];
 
     expect(Compiler.compile(template, data)).to.eql([
       [
-        {foo: 'bar'}, {bar: 'foo'}
+        { foo: 'bar' }, { bar: 'foo' }
       ],
-      ['foo_foo', {text: 'bar_foo', customAttribute: 'customValue'}],
-      ['foo_bar', {text: 'bar_bar', customAttribute: 'customValue'}]
+      ['foo_foo', { text: 'bar_foo', customAttribute: 'customValue' }],
+      ['foo_bar', { text: 'bar_bar', customAttribute: 'customValue' }]
     ]);
     done();
   });
 
   it('should replace with an array and helpers', function (done) {
-    var data = {
+    const data = {
       foo: [
-        {bar: {foo: '1'}},
-        {bar: {foo: '2'}}
+        { bar: { foo: '1' } },
+        { bar: { foo: '2' } }
       ]
     };
-    var template = [
+    const template = [
       {
-        '[[foo]]': [{text: '{{#sum}}{{bar.foo}},{{bar.foo}}{{/sum}} {{#calc}}{{/calc}}', customAttribute: 'customValue'}]
+        '[[foo]]': [{ text: '{{#sum}}{{bar.foo}},{{bar.foo}}{{/sum}} {{#calc}}{{/calc}}', customAttribute: 'customValue' }]
       }
     ];
 
     expect(Compiler.compile(template, data, helpers)).to.eql([
-      [{text: '2 3', customAttribute: 'customValue'}],
-      [{text: '4 3', customAttribute: 'customValue'}]
+      [{ text: '2 3', customAttribute: 'customValue' }],
+      [{ text: '4 3', customAttribute: 'customValue' }]
     ]);
     done();
   });

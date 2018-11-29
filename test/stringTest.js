@@ -1,11 +1,10 @@
-var should = require('chai').should(),
-    expect = require('chai').expect;
+const expect = require('chai').expect;
 
-var stringCompiler = require('../src/string');
+const stringCompiler = require('../src/string');
 
 describe('String compiler', function () {
   it('should return original string if no variable', function (done) {
-    var data = {
+    const data = {
       foo: 'bar'
     };
 
@@ -14,7 +13,7 @@ describe('String compiler', function () {
   });
 
   it('should replace string', function (done) {
-    var data = {
+    const data = {
       foo: 'bar'
     };
 
@@ -23,7 +22,7 @@ describe('String compiler', function () {
   });
 
   it('should replace substring', function (done) {
-    var data = {
+    const data = {
       foo: 'bar'
     };
 
@@ -32,7 +31,7 @@ describe('String compiler', function () {
   });
 
   it('should replace nested string', function (done) {
-    var data = {
+    const data = {
       foo: {
         foo: 'bar'
       }
@@ -43,7 +42,7 @@ describe('String compiler', function () {
   });
 
   it('should replace string with function', function (done) {
-    var data = {
+    const data = {
       foo: function () {
         return 1 + 1;
       }
@@ -54,7 +53,7 @@ describe('String compiler', function () {
   });
 
   it('should replace string with nested function', function (done) {
-    var data = {
+    const data = {
       foo: {
         foo: function () {
           return 1 + 1;
@@ -67,7 +66,7 @@ describe('String compiler', function () {
   });
 
   it('should replace strings inside helper', function (done) {
-    var data = {
+    const data = {
       foo: 'bar',
       bar: {
         foo: 'foobar',
@@ -82,7 +81,7 @@ describe('String compiler', function () {
   });
 
   it('should replace with void string if variable is not found', function (done) {
-    var data = {
+    const data = {
       foo: 'bar'
     };
 
